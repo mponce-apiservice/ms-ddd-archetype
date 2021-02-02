@@ -2,7 +2,6 @@ package ec.com.dinersclub.dddmodules.application.cqrs.queries;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -21,13 +20,13 @@ public class FruitQueryServiceImpl implements IFruitQueryService{
         return map(fruitRepository.getFruits());
     }
 	
-    public List<FruitQuery> map(Optional<List<Fruit>> fruits) {
+    public List<FruitQuery> map(List<Fruit> fruits) {
         if (fruits.isEmpty()) {
             return null;
         }
 
-        List<FruitQuery> list = new ArrayList<FruitQuery>(fruits.get().size());
-        for (Fruit fruit : fruits.get()) {
+        List<FruitQuery> list = new ArrayList<FruitQuery>(fruits.size());
+        for (Fruit fruit : fruits) {
             list.add(entityToDto(fruit));
         }
 

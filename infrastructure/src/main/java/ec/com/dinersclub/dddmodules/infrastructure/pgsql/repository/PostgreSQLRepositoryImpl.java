@@ -1,7 +1,6 @@
 package ec.com.dinersclub.dddmodules.infrastructure.pgsql.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -19,23 +18,23 @@ public class PostgreSQLRepositoryImpl implements IPostgreSQLRepository{
 	FruitRepository fruitRepository;
     
     @Override
-	public Optional<List<Fruit>> getFruits() {
+	public List<Fruit> getFruits() {
 		List<FruitEntity> fruitEntityList = fruitRepository.listAll();
 		if (!fruitEntityList.isEmpty()) {
-			return Optional.of(FruitEntity
-					.map(fruitEntityList));
+			return FruitEntity
+					.map(fruitEntityList);
 		} else {
-            return Optional.empty();
+            return null;
         }
 	}
     
 	@Override
-	public Optional<Fruit> getFruit(int id) {
+	public Fruit getFruit(int id) {
 		FruitEntity fruitEntity = fruitRepository.findById(id);
         if (fruitEntity != null) {
-            return Optional.of(fruitEntity.toFruit());
+            return fruitEntity.toFruit();
         } else {
-            return Optional.empty();
+            return null;
         }
 	}
 
