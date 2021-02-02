@@ -1,5 +1,7 @@
 package ec.com.dinersclub.dddmodules.application.rest;
 
+import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +18,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +25,6 @@ import ec.com.dinersclub.dddmodules.application.cqrs.commands.IFruitCommandServi
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateFruitCommand;
 import ec.com.dinersclub.dddmodules.application.cqrs.queries.IFruitQueryService;
 import ec.com.dinersclub.dddmodules.application.cqrs.queries.dto.FruitQuery;
-import ec.com.dinersclub.dddmodules.application.events.audit.IAuditoriaEvent;
-import ec.com.dinersclub.dddmodules.application.events.audit.dto.Auditoria;
-
-import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
 
 @Path("/fruits")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,18 +32,12 @@ import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv
 public class FruitResource {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FruitResource.class);
-	
-	@ConfigProperty(name = "audit.microservice.name")
-	private String microservice;
 
 	@Inject
 	private IFruitQueryService readService;
 	
 	@Inject
 	private IFruitCommandService writeService;
-	
-	@Inject
-	private IAuditoriaEvent auditService;
 
     @GET
     public List<FruitQuery> list() {
@@ -56,15 +47,6 @@ public class FruitResource {
     @POST
     public Response add(@Valid CreateFruitCommand command) {
     	writeService.createFruitCommand(command);
-    	
-    	Auditoria aud = new Auditoria();
-    	aud.microservice = microservice;
-    	aud.method = "POST";
-    	aud.request = "entrada";
-    	aud.response = "salida";
-    	
-    	auditService.generateEventHandler(aud);
-    	
     	logger.info("Test log of Created Fruit", kv("command", command), kv("created",new Date().toString()));
     	return Response.status(201).build();
     }
