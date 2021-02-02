@@ -29,6 +29,7 @@
     <docker-plugin.version>0.34.1</docker-plugin.version>
     <quarkus.logging.version>0.2.3</quarkus.logging.version>
   </properties>
+	
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -40,6 +41,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+	
   <dependencies>
     <dependency>
   	  <groupId>io.quarkiverse.loggingjson</groupId>
@@ -49,8 +51,9 @@
     <dependency>
 	  <groupId>io.quarkus</groupId>
 	  <artifactId>quarkus-smallrye-health</artifactId>
-	</dependency>
+    </dependency>
   </dependencies>
+	
   <build>
     <plugins>
       <plugin>
