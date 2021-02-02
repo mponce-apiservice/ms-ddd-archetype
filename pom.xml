@@ -13,7 +13,7 @@
   	<module>domain</module>
   </modules>
   
-  <!--<properties>
+  <properties>
     <appmodules.version>1.0.0</appmodules.version>
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -28,8 +28,9 @@
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <docker-plugin.version>0.34.1</docker-plugin.version>
     <quarkus.logging.version>0.2.3</quarkus.logging.version>
-  </properties>-->
-  <properties>
+  </properties>
+  
+  <!--<properties>
     <appmodules.version>1.0.0</appmodules.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -44,19 +45,8 @@
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
     <jacoco.version>0.8.4</jacoco.version>
     <quarkus.logging.version>0.2.3</quarkus.logging.version>
-  </properties>
+  </properties>-->
 	
-  <!--<dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>${quarkus.platform.artifact-id}</artifactId>
-        <version>${quarkus.platform.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>-->
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -68,6 +58,18 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  
+  <!--<dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>-->
 	
   <dependencies>
     <dependency>
@@ -79,16 +81,16 @@
 	  <groupId>io.quarkus</groupId>
 	  <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.jacoco</groupId>
       <artifactId>org.jacoco.agent</artifactId>
       <classifier>runtime</classifier>
       <scope>test</scope>
       <version>${jacoco.version}</version>
-    </dependency>
+    </dependency>-->
   </dependencies>
 	
-  <!--<build>
+  <build>
     <plugins>
       <plugin>
         <groupId>io.quarkus</groupId>
@@ -156,8 +158,8 @@
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
     </profile>
-  </profiles>-->
-<build>
+  </profiles>
+  <!--<build>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -321,5 +323,5 @@
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
     </profile>
-  </profiles>
+  </profiles>-->
 </project>
