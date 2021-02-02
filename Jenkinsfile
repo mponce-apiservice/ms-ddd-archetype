@@ -133,7 +133,8 @@ spec:
             steps {
                 container('maven') {
                     script {
-                        sh 'mvn -s settings.xml clean install -Dmaven.test.skip=true'
+                        sh 'mvn -s settings.xml clean install -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true -Dquarkus.package.uber-jar=true'
+                        //sh 'mvn -s settings.xml clean install -Dmaven.test.skip=true'
                     }
                 }
             }
