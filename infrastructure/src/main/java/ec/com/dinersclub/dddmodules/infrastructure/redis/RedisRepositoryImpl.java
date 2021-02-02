@@ -1,10 +1,10 @@
 package ec.com.dinersclub.dddmodules.infrastructure.redis;
 
-import io.quarkus.redis.client.RedisClient;
-import io.quarkus.redis.client.reactive.ReactiveRedisClient;
+//import io.quarkus.redis.client.RedisClient;
+//import io.quarkus.redis.client.reactive.ReactiveRedisClient;
 import io.smallrye.mutiny.Uni;
 
-import io.vertx.mutiny.redis.client.Response;
+//import io.vertx.mutiny.redis.client.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,37 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class RedisRepositoryImpl implements IRedisRepository {
 
-    @Inject
+	@Override
+	public Uni<Void> del(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String get(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void set(String key, String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void increment(String key, String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Uni<List<String>> keys() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+    /*@Inject
     RedisClient redisClient;
 
     @Inject
@@ -52,5 +82,5 @@ public class RedisRepositoryImpl implements IRedisRepository {
                     }
                     return result;
                 });
-    }
+    }*/
 }
