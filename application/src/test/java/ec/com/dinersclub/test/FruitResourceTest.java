@@ -77,11 +77,4 @@ public class FruitResourceTest {
 		        .statusCode(200);
     }
     
-    @Test
-    public void testListNoContent() {
-        given()
-                .when().get("/fruits")
-                .then()
-                .statusCode(204);
-    }
 }
