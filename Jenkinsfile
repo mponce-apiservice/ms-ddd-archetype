@@ -58,7 +58,7 @@ spec:
     }
   }
     environment {
-        APP_NAME = "tarjeta-credito"
+        APP_NAME = "microservice-ddd-core"
         APP_VERSION = ""
         IMAGE = ""
         REGISTRY = "331022218908.dkr.ecr.us-east-1.amazonaws.com"
@@ -201,7 +201,7 @@ spec:
                                 // Validando si el tag del is existe, osea la version
                                 if (!openshift.selector("istag", "${APP_NAME}-${AMBIENTE}:${APP_VERSION}").exists()){
                                     echo " --> Creando la imagen para la version ${APP_VERSION}"
-                                    def bc = openshift.selector("bc", "${APP_NAME}-${AMBIENTE}").startBuild("--from-file=target/${IMAGEN}-${APP_VERSION}-runner.jar", "--follow", "--wait=true")
+                                    def bc = openshift.selector("bc", "${APP_NAME}-${AMBIENTE}").startBuild("--from-file=application/target/application-${APP_VERSION}-runner.jar", "--follow", "--wait=true")
                             
                                     def result = bc.logs('-f')
                                     echo "The logs operation require ${result.actions.size()} oc interactions"
