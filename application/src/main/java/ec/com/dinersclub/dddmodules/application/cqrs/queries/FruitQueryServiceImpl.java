@@ -8,13 +8,13 @@ import javax.inject.Inject;
 
 import ec.com.dinersclub.dddmodules.application.cqrs.queries.dto.FruitQuery;
 import ec.com.dinersclub.dddmodules.domain.model.Fruit;
-import ec.com.dinersclub.dddmodules.domain.repository.IPostgreSQLRepository;
+import ec.com.dinersclub.dddmodules.domain.repository.IRepository;
 
 @ApplicationScoped
 public class FruitQueryServiceImpl implements IFruitQueryService{
 	
 	@Inject
-	private IPostgreSQLRepository fruitRepository;
+	private IRepository fruitRepository;
 	
 	public List<FruitQuery> getAll() {
         return map(fruitRepository.getFruits());

@@ -1,10 +1,10 @@
 package ec.com.dinersclub.dddmodules.infrastructure.redis;
 
-//import io.quarkus.redis.client.RedisClient;
-//import io.quarkus.redis.client.reactive.ReactiveRedisClient;
+import io.quarkus.redis.client.RedisClient;
+import io.quarkus.redis.client.reactive.ReactiveRedisClient;
 import io.smallrye.mutiny.Uni;
 
-//import io.vertx.mutiny.redis.client.Response;
+import io.vertx.mutiny.redis.client.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,44 +12,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ec.com.dinersclub.dddmodules.domain.repository.IRedisRepository;
-
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class RedisRepositoryImpl implements IRedisRepository {
+public class RedisRepository {
 
-	@Override
-	public Uni<Void> del(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String get(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void set(String key, String value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void increment(String key, String value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Uni<List<String>> keys() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-    /*@Inject
+    @Inject
     RedisClient redisClient;
 
     @Inject
@@ -68,10 +36,6 @@ public class RedisRepositoryImpl implements IRedisRepository {
         redisClient.set(Arrays.asList(key, value));
     }
 
-    public void increment(String key, String value) {
-        redisClient.incrby(key, value);
-    }
-
     public Uni<List<String>> keys() {
         return reactiveRedisClient
                 .keys("*")
@@ -82,5 +46,5 @@ public class RedisRepositoryImpl implements IRedisRepository {
                     }
                     return result;
                 });
-    }*/
+    }
 }
