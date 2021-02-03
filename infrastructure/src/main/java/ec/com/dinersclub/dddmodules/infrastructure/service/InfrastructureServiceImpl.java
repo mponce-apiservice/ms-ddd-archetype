@@ -11,7 +11,6 @@ import ec.com.dinersclub.dddmodules.domain.repository.IRepository;
 import ec.com.dinersclub.dddmodules.infrastructure.pgsql.entities.FruitEntity;
 import ec.com.dinersclub.dddmodules.infrastructure.pgsql.repository.FruitRepository;
 import ec.com.dinersclub.dddmodules.infrastructure.redis.RedisRepository;
-import io.smallrye.mutiny.Uni;
 
 @ApplicationScoped
 public class InfrastructureServiceImpl implements IRepository {
@@ -23,8 +22,8 @@ public class InfrastructureServiceImpl implements IRepository {
 	RedisRepository redisRepository;
 
 	@Override
-	public Uni<Void> delCache(String key) {
-		return redisRepository.del(key);
+	public void delCache(String key) {
+		redisRepository.del(key);
 	}
 
 	@Override
@@ -35,11 +34,6 @@ public class InfrastructureServiceImpl implements IRepository {
 	@Override
 	public void setCache(String key, String value) {
 		redisRepository.set(key, value);
-	}
-
-	@Override
-	public Uni<List<String>> keysCache() {
-		return redisRepository.keys();
 	}
 
 	@Override
@@ -72,7 +66,7 @@ public class InfrastructureServiceImpl implements IRepository {
 	@Override
 	@Transactional
 	public void deleteFruit(int id) {
-		FruitEntity.deleteById(id);
+		FruitEntity.delete("id", id);
 	}
 
 }

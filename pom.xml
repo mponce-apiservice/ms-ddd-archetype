@@ -60,14 +60,26 @@
   </dependencyManagement>
 	
   <dependencies>
-    <dependency>
+    <!--<dependency>
   	  <groupId>io.quarkiverse.loggingjson</groupId>
   	  <artifactId>quarkiverse-logging-json</artifactId>
   	  <version>${quarkus.logging.version}</version>
-    </dependency>
+    </dependency>-->
+    <!--<dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-logging-json</artifactId>
+      <version>${quarkus.platform.version.mvn}</version>
+    </dependency>-->
     <dependency>
 	  <groupId>io.quarkus</groupId>
 	  <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>org.jacoco.agent</artifactId>
+      <classifier>runtime</classifier>
+      <scope>test</scope>
+      <version>${jacoco.version}</version>
     </dependency>
   </dependencies>
   

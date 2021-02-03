@@ -12,10 +12,4 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   
-  <dependencies>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx</artifactId>
-    </dependency>
-  </dependencies>
 </project>

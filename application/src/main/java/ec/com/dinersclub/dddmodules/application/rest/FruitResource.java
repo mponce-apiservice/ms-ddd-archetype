@@ -1,6 +1,6 @@
 package ec.com.dinersclub.dddmodules.application.rest;
 
-import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
+//import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
 
 import java.util.Date;
 import java.util.List;
@@ -47,7 +47,7 @@ public class FruitResource {
     @POST
     public Response add(@Valid CreateFruitCommand command) {
     	writeService.createFruitCommand(command);
-    	logger.info("Test log of Created Fruit", kv("command", command), kv("created",new Date().toString()));
+    	//logger.info("Test log of Created Fruit", kv("command", command), kv("created",new Date().toString()));
     	return Response.status(201).build();
     }
 
