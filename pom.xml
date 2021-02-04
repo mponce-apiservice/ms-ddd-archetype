@@ -71,16 +71,13 @@
       <version>${quarkus.platform.version.mvn}</version>
     </dependency>-->
     <dependency>
-	  <groupId>io.quarkus</groupId>
-	  <artifactId>quarkus-smallrye-health</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.jacoco</groupId>
       <artifactId>org.jacoco.agent</artifactId>
       <classifier>runtime</classifier>
       <scope>test</scope>
       <version>${jacoco.version}</version>
     </dependency>
+    
   </dependencies>
   
   <build>
@@ -88,10 +85,6 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -332,7 +325,7 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    <repository>
+    <!--<repository>
       <id>mvn-repository</id>
       <url>https://repo1.maven.org/maven2</url>
       <releases>
@@ -341,6 +334,6 @@
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
-    </repository>
+    </repository>-->
   </repositories>
 </project>

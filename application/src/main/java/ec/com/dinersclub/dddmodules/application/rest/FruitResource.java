@@ -2,7 +2,6 @@ package ec.com.dinersclub.dddmodules.application.rest;
 
 //import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,9 +17,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.IFruitCommandService;
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateFruitCommand;
 import ec.com.dinersclub.dddmodules.application.cqrs.queries.IFruitQueryService;
@@ -30,8 +26,6 @@ import ec.com.dinersclub.dddmodules.application.cqrs.queries.dto.FruitQuery;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
-	
-	private static final Logger logger = LoggerFactory.getLogger(FruitResource.class);
 
 	@Inject
 	private IFruitQueryService readService;

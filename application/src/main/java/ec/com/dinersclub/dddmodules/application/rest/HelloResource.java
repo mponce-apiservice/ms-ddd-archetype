@@ -1,8 +1,8 @@
 package ec.com.dinersclub.dddmodules.application.rest;
 
-import ec.com.dinersclub.dddmodules.application.grpc.GreeterGrpc;
-import ec.com.dinersclub.dddmodules.application.grpc.HelloRequest;
-import io.quarkus.grpc.runtime.annotations.GrpcService;
+//import ec.com.dinersclub.dddmodules.application.grpc.GreeterGrpc;
+//import ec.com.dinersclub.dddmodules.application.grpc.HelloRequest;
+//import io.quarkus.grpc.runtime.annotations.GrpcService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -14,9 +14,9 @@ import javax.ws.rs.core.MediaType;
 @Path("/hello")
 public class HelloResource {
 	
-	@Inject
-    @GrpcService("hello")                     
-    GreeterGrpc.GreeterBlockingStub client;
+	//@Inject
+    //@GrpcService("hello")                     
+    //GreeterGrpc.GreeterBlockingStub client;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -24,9 +24,9 @@ public class HelloResource {
         return "Hello RESTEasy";
     }
     
-    @GET
-    @Path("/{name}")
-    public String hello(@PathParam("name") String name) {
-        return client.sayHello(HelloRequest.newBuilder().setName(name).build()).getMessage();  
-    }
+    //@GET
+    //@Path("/{name}")
+    //public String hello(@PathParam("name") String name) {
+    //    return client.sayHello(HelloRequest.newBuilder().setName(name).build()).getMessage();  
+    //}
 }

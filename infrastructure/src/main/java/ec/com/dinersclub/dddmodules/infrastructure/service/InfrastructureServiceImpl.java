@@ -23,17 +23,18 @@ public class InfrastructureServiceImpl implements IRepository {
 
 	@Override
 	public void delCache(String key) {
-		redisRepository.del(key);
+		//redisRepository.del(key);
 	}
 
 	@Override
 	public String getCache(String key) {
-		return redisRepository.get(key);
+		//return redisRepository.get(key);
+		return null;
 	}
 
 	@Override
 	public void setCache(String key, String value) {
-		redisRepository.set(key, value);
+		//redisRepository.set(key, value);
 	}
 
 	@Override
