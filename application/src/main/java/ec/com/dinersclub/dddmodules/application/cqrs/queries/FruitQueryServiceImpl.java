@@ -14,7 +14,7 @@ import ec.com.dinersclub.dddmodules.domain.repository.IRepository;
 public class FruitQueryServiceImpl implements IFruitQueryService{
 	
 	@Inject
-	private IRepository fruitRepository;
+	IRepository fruitRepository;
 	
 	public List<FruitQuery> getAll() {
         return map(fruitRepository.getFruits());

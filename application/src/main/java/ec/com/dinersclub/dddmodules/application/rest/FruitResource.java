@@ -28,10 +28,10 @@ import ec.com.dinersclub.dddmodules.application.cqrs.queries.dto.FruitQuery;
 public class FruitResource {
 
 	@Inject
-	private IFruitQueryService readService;
+	IFruitQueryService readService;
 	
 	@Inject
-	private IFruitCommandService writeService;
+	IFruitCommandService writeService;
 
     @GET
     public List<FruitQuery> list() {

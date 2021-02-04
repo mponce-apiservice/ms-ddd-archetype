@@ -24,7 +24,7 @@ public class AuditResource {
 	private String microservice;
 
 	@Inject
-	private IAuditoriaEvent auditService;
+	IAuditoriaEvent auditService;
 
 
     @POST

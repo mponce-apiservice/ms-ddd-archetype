@@ -11,7 +11,7 @@ import ec.com.dinersclub.dddmodules.domain.repository.IRepository;
 public class FruitCommandServiceImpl implements IFruitCommandService{
 	
 	@Inject
-	private IRepository fruitRepository;
+	IRepository fruitRepository;
 	
 	
 	public void createFruitCommand(CreateFruitCommand command) {
