@@ -16,7 +16,7 @@
   	<dependency>
       <groupId>com.diners.dddmodules.domain</groupId>
       <artifactId>domain</artifactId>
-      <version>${appmodules.version}</version>
+      <version>${parent.version}</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

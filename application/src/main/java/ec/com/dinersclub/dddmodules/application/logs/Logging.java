@@ -6,32 +6,34 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
-import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
+
+//import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
 
 @ApplicationScoped
 public class Logging implements ILogging {
 	
-	private static final Logger logger = LoggerFactory.getLogger(Logging.class);
+	private static final Logger logger = Logger.getLogger(Logging.class);
 	
-	public void debug(String message, Object data) {
-		logger.debug(message, kv("custom", data));
+	@Override
+	public void debug(String message) {
+		logger.debug(message);
 	}
 	
-	public void info(String message, Object data) {
-		logger.info(message, kv("custom", data));
+	@Override
+	public void info(String message) {
+		logger.info(message);
 	}
 
 	@Override
-	public void warn(String message, Object data) {
-		logger.warn(message, kv("custom", data));
+	public void warn(String message) {
+		logger.warn(message);
 		
 	}
 
 	@Override
-	public void error(String message, Object data) {
-		logger.error(message, kv("custom", data));
+	public void error(String message) {
+		logger.error(message);
 	}
 }

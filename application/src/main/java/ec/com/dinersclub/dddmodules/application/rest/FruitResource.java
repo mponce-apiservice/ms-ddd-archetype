@@ -43,7 +43,7 @@ public class FruitResource {
     @POST
     public Response add(@Valid CreateFruitCommand command) {
     	writeService.createFruitCommand(command);
-    	log.info("Test log of Created Fruit", command);
+    	log.info("Test log of Created Fruit");
     	return Response.status(201).build();
     }
 
