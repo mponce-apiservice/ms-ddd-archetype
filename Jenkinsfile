@@ -101,7 +101,7 @@ spec:
             }
             steps {
                 script {
-                    sh './mvnw clean package -Pnative -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker -Dquarkus.container-image.build=true'
+                    sh 'mvn clean package -Pnative -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker -Dquarkus.container-image.build=true'
                 }
             }
         }
@@ -113,7 +113,7 @@ spec:
                 stage("Unit Test") {
                     steps {
                         script {
-                            sh './mvnw test'
+                            sh 'mvn test'
                         }
                     }
                     
@@ -123,7 +123,7 @@ spec:
                         script {
                             withSonarQubeEnv('Sonar') {
                                 echo " --> Sonar Scan"
-                                sh "./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=${APP_NAME}-${AMBIENTE} -Dsonar.projectName=${APP_NAME}-${AMBIENTE} -Dsonar.projectVersion=${APP_VERSION} -Dproject.settings=sonar/maven-sonar-project.properties"
+                                sh "mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=${APP_NAME}-${AMBIENTE} -Dsonar.projectName=${APP_NAME}-${AMBIENTE} -Dsonar.projectVersion=${APP_VERSION} -Dproject.settings=sonar/maven-sonar-project.properties"
                             }
                         }
                     }
