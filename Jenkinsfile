@@ -153,8 +153,7 @@ spec:
             steps {
                 script {
                     echo "Docker Build..."
-					sh "cd application"
-                    sh "docker build -f src/main/docker/Dockerfile.jvm -t ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ."
+                    sh "docker build -f application/src/main/docker/Dockerfile.jvm -t ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ."
                     
                     echo "Docker Tag..."
                     sh "docker tag ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ${PUSH}:${APP_VERSION}-${AMBIENTE}"
