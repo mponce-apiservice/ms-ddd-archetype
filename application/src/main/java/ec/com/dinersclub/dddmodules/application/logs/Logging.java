@@ -1,15 +1,8 @@
 package ec.com.dinersclub.dddmodules.application.logs;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
-
-
-//import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
 
 @ApplicationScoped
 public class Logging implements ILogging {

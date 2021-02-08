@@ -71,11 +71,6 @@
 	  <artifactId>quarkus-container-image-docker</artifactId>
 	</dependency>
 	
-	<!--<dependency>
-  	  <groupId>io.quarkiverse.loggingjson</groupId>
-  	  <artifactId>quarkiverse-logging-json</artifactId>
-  	  <version>${quarkus.logging.version}</version>
-    </dependency> -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-logging-json</artifactId>
