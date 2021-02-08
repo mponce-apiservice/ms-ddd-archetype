@@ -101,7 +101,7 @@ spec:
             }
             steps {
                 script {
-                    sh 'mvn clean package -Pnative -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=docker -Dquarkus.container-image.build=true'
+                    sh 'mvn clean package -Pnative -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true'
                 }
             }
         }
