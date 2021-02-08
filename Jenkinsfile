@@ -101,7 +101,7 @@ spec:
             }
             steps {
                 script {
-                    sh 'mvn clean package -Pnative -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true'
+                    sh 'mvn clean package -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true'
                 }
             }
         }
@@ -153,7 +153,7 @@ spec:
             steps {
                 script {
                     echo "Docker Build..."
-                    sh "docker build -f application/src/main/docker/Dockerfile.native -t ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ."
+                    sh "docker build -f application/src/main/docker/Dockerfile.jvm -t ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ."
                     
                     echo "Docker Tag..."
                     sh "docker tag ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ${PUSH}:${APP_VERSION}-${AMBIENTE}"
