@@ -14,14 +14,14 @@
   
   <dependencies>
     <dependency>
-      <groupId>com.diners.dddmodules.domain</groupId>
+      <groupId>ec.com.dinersclub.dddmodules.domain</groupId>
       <artifactId>domain</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.diners.dddmodules.infrastructure</groupId>
+      <groupId>ec.com.dinersclub.dddmodules.infrastructure</groupId>
       <artifactId>infrastructure</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
   	  <groupId>io.quarkus</groupId>
