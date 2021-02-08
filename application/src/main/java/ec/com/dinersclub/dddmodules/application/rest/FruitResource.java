@@ -1,7 +1,5 @@
 package ec.com.dinersclub.dddmodules.application.rest;
 
-//import static io.quarkiverse.loggingjson.providers.KeyValueStructuredArgument.kv;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,11 +19,15 @@ import ec.com.dinersclub.dddmodules.application.cqrs.commands.IFruitCommandServi
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateFruitCommand;
 import ec.com.dinersclub.dddmodules.application.cqrs.queries.IFruitQueryService;
 import ec.com.dinersclub.dddmodules.application.cqrs.queries.dto.FruitQuery;
+import ec.com.dinersclub.dddmodules.application.logs.ILogging;
 
 @Path("/fruits")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
+	
+	@Inject
+	ILogging log;
 
 	@Inject
 	IFruitQueryService readService;
@@ -41,7 +43,7 @@ public class FruitResource {
     @POST
     public Response add(@Valid CreateFruitCommand command) {
     	writeService.createFruitCommand(command);
-    	//logger.info("Test log of Created Fruit", kv("command", command), kv("created",new Date().toString()));
+    	log.info("Test log of Created Fruit", command);
     	return Response.status(201).build();
     }
 
