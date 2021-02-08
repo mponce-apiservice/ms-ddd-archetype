@@ -153,7 +153,7 @@ spec:
             steps {
                 script {
                     echo "Docker Build..."
-					sh "cd application"
+					sh "pwd"
                     sh "docker build -f src/main/docker/Dockerfile.jvm -t ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ."
                     
                     echo "Docker Tag..."
