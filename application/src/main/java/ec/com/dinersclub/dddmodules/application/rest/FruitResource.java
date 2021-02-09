@@ -19,15 +19,11 @@ import ec.com.dinersclub.dddmodules.application.cqrs.commands.IFruitCommandServi
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateFruitCommand;
 import ec.com.dinersclub.dddmodules.application.cqrs.queries.IFruitQueryService;
 import ec.com.dinersclub.dddmodules.application.cqrs.queries.dto.FruitQuery;
-import ec.com.dinersclub.dddmodules.application.logs.ILogging;
 
 @Path("/fruits")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FruitResource {
-	
-	@Inject
-	ILogging log;
 
 	@Inject
 	IFruitQueryService readService;
@@ -43,7 +39,6 @@ public class FruitResource {
     @POST
     public Response add(@Valid CreateFruitCommand command) {
     	writeService.createFruitCommand(command);
-    	log.info("Test log of Created Fruit");
     	return Response.status(201).build();
     }
 
