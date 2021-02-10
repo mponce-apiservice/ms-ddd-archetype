@@ -44,13 +44,10 @@ spec:
             agent any
             steps {
                 script {
-                    echo "Maven version release"
-                    sh "mvn --batch-mode release:update-versions"
                     // Ref: https://stackoverflow.com/a/54154911/11097939
                     IMAGEN = readMavenPom().getArtifactId()
-                    // IMAGEN = readMavenPom().getArtifactId()
-                    APP_VERSION = readMavenPom().getVersion()
                     echo "Nombre del Artefacto: ${IMAGEN}"
+                    APP_VERSION = readMavenPom().getVersion()
                     echo "Version: ${APP_VERSION}"
 
                     // sh "oc version"
@@ -103,6 +100,11 @@ spec:
             }
             steps {
                 script {
+                    echo "Maven version release"
+                    sh "mvn --batch-mode release:update-versions"
+                    APP_VERSION = readMavenPom().getVersion()
+                    echo "Version: ${APP_VERSION}"
+                    
                     sh '\\cp infrastructure/src/main/resources/META-INF/microprofile-config-test.properties infrastructure/src/main/resources/META-INF/microprofile-config.properties'
                     sh 'mvn clean package -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true'
                 }
