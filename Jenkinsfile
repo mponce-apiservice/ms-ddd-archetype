@@ -44,6 +44,8 @@ spec:
             agent any
             steps {
                 script {
+                    echo "Maven version release"
+                    sh "mvn --batch-mode release:update-versions"
                     // Ref: https://stackoverflow.com/a/54154911/11097939
                     IMAGEN = readMavenPom().getArtifactId()
                     // IMAGEN = readMavenPom().getArtifactId()
