@@ -364,7 +364,8 @@ spec:
             steps {
                 script {
                     echo " --> Release..."
-                    echo readMavenPom().getVersion()
+                    echo "Maven version release"
+                    sh "mvn --batch-mode release:update-versions -DdevelopmentVersion=${APP_VERSION}"
                     def release = "v${APP_VERSION}-${env.BRANCH_NAME}"
 
                     // Credentials
@@ -374,6 +375,9 @@ spec:
                             #!/bin/bash
                             
                             git config --local credential.helper "!f() { echo username=\\${GIT_USERNAME}; echo password=\\${GIT_PASSWORD}; }; f"
+                            
+                            git add -A
+							git commit -m "add release ${release}"
                             
                             git tag ${release}
 
