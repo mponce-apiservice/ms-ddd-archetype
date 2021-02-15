@@ -378,7 +378,7 @@ spec:
                             
                             git add -A
 							git commit -m "add release ${release}"
-							git push --force origin ${branch}
+							git push --force origin ${env.BRANCH_NAME}
                             
                             git tag ${release}
                             git push --force origin ${release}
