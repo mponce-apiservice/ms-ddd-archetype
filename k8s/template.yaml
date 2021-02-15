@@ -76,7 +76,7 @@ objects:
                 - name: AMBIENTE
                   value: "${AMBIENTE}"
               image: "${REGISTRY}"
-              imagePullPolicy: IfNotPresent
+              imagePullPolicy: Always
               livenessProbe:
                 failureThreshold: 3
                 httpGet:
