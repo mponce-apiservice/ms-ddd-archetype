@@ -367,7 +367,7 @@ spec:
                     def release = "v${APP_VERSION}-${env.BRANCH_NAME}"
 
                     // Credentials
-                    withCredentials([usernamePassword(credentialsId: 'github-push', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'mponce-apiservice', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh label: "", 
                         script: """
                             #!/bin/bash
