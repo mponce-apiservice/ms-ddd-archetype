@@ -273,6 +273,13 @@ spec:
 
                                     echo " --> Updating image version..."
                                     openshift.set("image", "dc/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
+                                    
+                                    def rm = openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").rollout()
+					                timeout(5) { 
+					                  openshift.selector("dc", templateName).related('pods').untilEach(1) {
+					                    return (it.object().status.phase == "Running")
+					                  }
+					                }
                                 }
                             }
                         }
