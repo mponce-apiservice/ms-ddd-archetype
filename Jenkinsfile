@@ -276,7 +276,7 @@ spec:
                                     
                                     def rm = openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").rollout()
 					                timeout(5) { 
-					                  openshift.selector("dc", templateName).related('pods').untilEach(1) {
+					                  openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").related('pods').untilEach(1) {
 					                    return (it.object().status.phase == "Running")
 					                  }
 					                }
