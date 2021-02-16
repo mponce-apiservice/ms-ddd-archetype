@@ -367,6 +367,9 @@ spec:
                     echo "Maven version release"
                     sh "mvn --batch-mode release:update-versions -DdevelopmentVersion=${APP_VERSION}"
                     def release = "v${APP_VERSION}-${env.BRANCH_NAME}"
+                    
+                    echo "Remove .properties microprofile"
+                    sh "rm -rf infrastructure/src/main/resources/META-INF/microprofile-config.properties"
 
                     // Credentials
                     withCredentials([usernamePassword(credentialsId: 'mponce-apiservice', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
