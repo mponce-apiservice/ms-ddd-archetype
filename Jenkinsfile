@@ -265,14 +265,14 @@ spec:
                                     }
                                     // 
 
-                                    openshift.set("triggers", "dc/${APP_NAME}-${AMBIENTE}", "--manual")
+                                    openshift.set("triggers", "deployment/${APP_NAME}-${AMBIENTE}", "--manual")
                                     echo " --> Desployed $APP_NAME!"
                                 }
                                 else {
                                     echo " --> Ya existe el Deployment $APP_NAME-${AMBIENTE}!"
 
                                     echo " --> Updating image version..."
-                                    openshift.set("image", "dc/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
+                                    openshift.set("image", "deployment/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
                                 }
                             }
                         }
@@ -295,14 +295,14 @@ spec:
                                 // Ref: https://github.com/openshift/jenkins-client-plugin#looking-to-verify-a-deployment-or-service-we-can-still-do-that
                                 echo " --> Validando el status del Deployment"
                                 if (openshift.selector("deployment", "${APP_NAME}-${AMBIENTE}").exists()){
-                                    def latestDeploymentVersion = openshift.selector('dc',"${APP_NAME}-${AMBIENTE}").object().status.latestVersion
+                                    def latestDeploymentVersion = openshift.selector('deployment',"${APP_NAME}-${AMBIENTE}").object().status.latestVersion
                                     def rc = openshift.selector('rc', "${APP_NAME}-${AMBIENTE}-${latestDeploymentVersion}")
                                     rc.untilEach(1){
                                         def rcMap = it.object()
                                         return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
                                     }
                                     
-                                    def dc = openshift.selector('dc', "${APP_NAME}-${AMBIENTE}")
+                                    def dc = openshift.selector('deployment', "${APP_NAME}-${AMBIENTE}")
                                     // this will wait until the desired replicas are available
                                     def status = dc.rollout().status()
                 
@@ -453,13 +453,13 @@ spec:
 def rollback(){
     echo " --> Rollback..."
     
-    REVISION = sh (script: "oc rollout history dc ${APP_NAME}-${AMBIENTE} | grep Complete | awk '{print \$1}' | tail -1 | awk '{print \$0-1}'", returnStdout:true).trim()
+    REVISION = sh (script: "oc rollout history deployment ${APP_NAME}-${AMBIENTE} | grep Complete | awk '{print \$1}' | tail -1 | awk '{print \$0-1}'", returnStdout:true).trim()
 
     echo " --> Revision: ${REVISION}"
-    rollback = openshift.selector("dc/${APP_NAME}-${AMBIENTE}").rollout().undo("--to-revision=${REVISION}")
+    rollback = openshift.selector("deployment/${APP_NAME}-${AMBIENTE}").rollout().undo("--to-revision=${REVISION}")
     // def result = rollback.history()
     
-    def dc = openshift.selector('dc', "${APP_NAME}-${AMBIENTE}")
+    def dc = openshift.selector('deployment', "${APP_NAME}-${AMBIENTE}")
     // this will wait until the desired replicas are available
     dc.rollout().status()
 }
