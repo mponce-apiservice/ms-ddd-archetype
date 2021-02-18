@@ -273,7 +273,8 @@ spec:
 
                                     echo " --> Updating image version..."
                                     openshift.set("image", "dc/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
-                                    openshift.set("image", "rc/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
+                                    def latestDeploymentVersion = openshift.selector('dc',"${APP_NAME}-${AMBIENTE}").object().status.latestVersion
+                                    openshift.set("image", "rc/${APP_NAME}-${AMBIENTE}-${latestDeploymentVersion}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
                                 }
                             }
                         }
