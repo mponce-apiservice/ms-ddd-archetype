@@ -47,7 +47,8 @@ objects:
     spec:
       replicas: 1
       selector:
-        app: ${APP_NAME}
+        matchLabels:
+          app: ${APP_NAME}
       template:
         metadata:
           creationTimestamp: null
