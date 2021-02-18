@@ -249,7 +249,7 @@ spec:
                         openshift.withCluster() {
                             openshift.withProject() {
                                 // Validando
-                                if (!openshift.selector("d", "${APP_NAME}-${AMBIENTE}").exists()){
+                                if (!openshift.selector("deployment", "${APP_NAME}-${AMBIENTE}").exists()){
                                     
                                     // DeploymemtConfig
                                     echo " --> Deploy..."
@@ -259,7 +259,7 @@ spec:
                                     
                                     // def app = openshift.newApp("--docker-image=${PUSH}:${APP_VERSION}", "--name=${APP_NAME}-${AMBIENTE}", "--env=AMBIENTE=${AMBIENTE}", "--as-deployment-config=true", "--show-all=true").narrow('svc').expose()
                             
-                                    def dc = openshift.selector("d", "${APP_NAME}-${AMBIENTE}")
+                                    def dc = openshift.selector("deployment", "${APP_NAME}-${AMBIENTE}")
                                     while (dc.object().spec.replicas != dc.object().status.availableReplicas) {
                                         sleep 10
                                     }
@@ -294,7 +294,7 @@ spec:
                                 // Validando el Deployment
                                 // Ref: https://github.com/openshift/jenkins-client-plugin#looking-to-verify-a-deployment-or-service-we-can-still-do-that
                                 echo " --> Validando el status del Deployment"
-                                if (openshift.selector("d", "${APP_NAME}-${AMBIENTE}").exists()){
+                                if (openshift.selector("deployment", "${APP_NAME}-${AMBIENTE}").exists()){
                                     def latestDeploymentVersion = openshift.selector('dc',"${APP_NAME}-${AMBIENTE}").object().status.latestVersion
                                     def rc = openshift.selector('rc', "${APP_NAME}-${AMBIENTE}-${latestDeploymentVersion}")
                                     rc.untilEach(1){
