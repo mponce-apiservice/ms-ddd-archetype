@@ -48,15 +48,6 @@ objects:
       replicas: 1
       selector:
         app: ${APP_NAME}
-      strategy:
-        resources: {}
-        rollingParams:
-          intervalSeconds: 1
-          maxSurge: 25%
-          maxUnavailable: 0
-          timeoutSeconds: 600
-          updatePeriodSeconds: 1
-        type: Rolling
       template:
         metadata:
           creationTimestamp: null
