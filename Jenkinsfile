@@ -247,7 +247,7 @@ spec:
                 container('tools') {
                     script {
                         sh "oc status"
-                        sh "oc get pods -n default"
+                        sh "oc get pods -n ${NAMESPACE}"
                         openshift.withCluster() {
                             openshift.withProject() {
                                 // Validando
