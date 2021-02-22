@@ -248,6 +248,7 @@ spec:
                     script {
                         sh "oc status"
                         sh "oc get pods -n ${NAMESPACE}"
+                        sh "oc apply --help"
                         openshift.withCluster() {
                             openshift.withProject() {
                                 // Validando
