@@ -246,9 +246,6 @@ spec:
             steps {
                 container('tools') {
                     script {
-                        sh "oc status"
-                        sh "oc get pods -n ${NAMESPACE}"
-                        sh "oc apply --help"
                         openshift.withCluster() {
                             openshift.withProject() {
                                 // Validando
@@ -268,15 +265,14 @@ spec:
                                     }
                                     // 
 
-                                    openshift.set("triggers", "deploy/${APP_NAME}-${AMBIENTE}", "--manual")
+                                    //openshift.set("triggers", "deploy/${APP_NAME}-${AMBIENTE}", "--manual")
                                     echo " --> Desployed $APP_NAME!"
                                 }
                                 else {
                                     echo " --> Ya existe el Deployment $APP_NAME-${AMBIENTE}!"
 
                                     echo " --> Updating image version..."
-                                    //openshift.set("image", "deploy/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
-                                    def app = openshift.replace("--file=./k8s/template.yaml", "--param=APP_NAME=${APP_NAME}-${AMBIENTE}", "--param=APP_VERSION=${APP_VERSION}", "--param=AMBIENTE=${AMBIENTE}", "--param=REGISTRY=${PUSH}:${APP_VERSION}-${AMBIENTE}" )
+                                    openshift.set("image", "deploy/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
                                 }
                             }
                         }
