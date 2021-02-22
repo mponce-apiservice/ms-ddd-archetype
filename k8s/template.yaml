@@ -20,6 +20,7 @@ objects:
           targetPort: 8080
       selector:
         app: ${APP_NAME}
+        deploymentconfig: ${APP_NAME}
       sessionAffinity: None
       type: ClusterIP
   - apiVersion: v1
@@ -38,22 +39,33 @@ objects:
       to:
         kind: Service
         name: ${APP_NAME}
-  - apiVersion: apps/v1
-    kind: Deployment
+  - apiVersion: v1
+    kind: DeploymentConfig
     metadata:
       labels:
         app: ${APP_NAME}
+        deploymentconfig: ${APP_NAME}
       name: ${APP_NAME}
     spec:
       replicas: 1
       selector:
-        matchLabels:
-          app: ${APP_NAME}
+        app: ${APP_NAME}
+        deploymentconfig: ${APP_NAME}
+      strategy:
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 0
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
       template:
         metadata:
           creationTimestamp: null
           labels:
             app: ${APP_NAME}
+            deploymentconfig: ${APP_NAME}
         spec:
           containers:
             - env:
@@ -64,11 +76,11 @@ objects:
                 - name: AMBIENTE
                   value: "${AMBIENTE}"
               image: "${REGISTRY}"
-              imagePullPolicy: Always
+              imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
                 httpGet:
-                  path: /health/live
+                  path: /
                   port: 8080
                 initialDelaySeconds: 60
                 periodSeconds: 20
@@ -81,7 +93,7 @@ objects:
               readinessProbe:
                 failureThreshold: 3
                 httpGet:
-                  path: /health/ready
+                  path: /
                   port: 8080
                 initialDelaySeconds: 60
                 periodSeconds: 20
