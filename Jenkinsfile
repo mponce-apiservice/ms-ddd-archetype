@@ -295,12 +295,12 @@ spec:
                                 // Ref: https://github.com/openshift/jenkins-client-plugin#looking-to-verify-a-deployment-or-service-we-can-still-do-that
                                 echo " --> Validando el status del Deployment"
                                 if (openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").exists()){
-                                    //def latestDeploymentVersion = openshift.selector('dc',"${APP_NAME}-${AMBIENTE}").object().status.latestVersion
-                                    //def rc = openshift.selector('rc', "${APP_NAME}-${AMBIENTE}-${latestDeploymentVersion}")
-                                    //rc.untilEach(1){
-                                    //    def rcMap = it.object()
-                                    //    return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
-                                    //}
+                                    def latestDeploymentVersion = openshift.selector('dc',"${APP_NAME}-${AMBIENTE}").object().status.latestVersion
+                                    def rc = openshift.selector('rc', "${APP_NAME}-${AMBIENTE}-${latestDeploymentVersion}")
+                                    rc.untilEach(1){
+                                        def rcMap = it.object()
+                                        return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
+                                    }
                                     
                                     def dc = openshift.selector('dc', "${APP_NAME}-${AMBIENTE}")
                                     // this will wait until the desired replicas are available
