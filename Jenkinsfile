@@ -274,7 +274,8 @@ spec:
                                     echo " --> Ya existe el Deployment $APP_NAME-${AMBIENTE}!"
 
                                     echo " --> Updating image version..."
-                                    openshift.set("image", "deploy/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
+                                    //openshift.set("image", "deploy/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
+                                    sh "oc apply -f ./k8s/template.yaml"
                                 }
                             }
                         }
