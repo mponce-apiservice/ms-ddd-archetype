@@ -44,13 +44,10 @@ spec:
             agent any
             steps {
                 script {
-                    // Ref: https://stackoverflow.com/a/54154911/11097939
                     IMAGEN = readMavenPom().getArtifactId()
                     echo "Nombre del Artefacto: ${IMAGEN}"
                     APP_VERSION = readMavenPom().getVersion()
-                    echo "Version: ${APP_VERSION}"
-
-                    // sh "oc version"
+                    echo "Version actual: ${APP_VERSION}"
                 }
             }
         }
@@ -58,7 +55,6 @@ spec:
             agent any
             steps {
                 script {
-                    // https://stackoverflow.com/a/59585410/11097939
                     def branch = "${env.BRANCH_NAME}"
                     echo " --> Rama: ${branch}"
                     switch(branch) {
@@ -103,7 +99,7 @@ spec:
                     echo "Maven version release"
                     sh "mvn --batch-mode release:update-versions"
                     APP_VERSION = readMavenPom().getVersion()
-                    echo "Version: ${APP_VERSION}"
+                    echo "Version nueva: ${APP_VERSION}"
                     
                     sh '\\cp infrastructure/src/main/resources/META-INF/microprofile-config-test.properties infrastructure/src/main/resources/META-INF/microprofile-config.properties'
                     sh 'mvn clean package -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true'
@@ -255,17 +251,10 @@ spec:
                                     echo " --> Deploy..."
                                     def app = openshift.newApp("--file=./k8s/template.yaml", "--param=APP_NAME=${APP_NAME}-${AMBIENTE}", "--param=APP_VERSION=${APP_VERSION}", "--param=AMBIENTE=${AMBIENTE}", "--param=REGISTRY=${PUSH}:${APP_VERSION}-${AMBIENTE}" )
                                     
-                                    // Ref: https://stackoverflow.com/a/65156451/11097939
-                                    
-                                    // def app = openshift.newApp("--docker-image=${PUSH}:${APP_VERSION}", "--name=${APP_NAME}-${AMBIENTE}", "--env=AMBIENTE=${AMBIENTE}", "--as-deployment-config=true", "--show-all=true").narrow('svc').expose()
-                            
                                     def dc = openshift.selector("dc", "${APP_NAME}-${AMBIENTE}")
                                     while (dc.object().spec.replicas != dc.object().status.availableReplicas) {
                                         sleep 10
                                     }
-                                    // 
-
-                                    //openshift.set("triggers", "dc/${APP_NAME}-${AMBIENTE}", "--manual")
                                     echo " --> Desployed $APP_NAME!"
                                 }
                                 else {
@@ -292,7 +281,6 @@ spec:
                         openshift.withCluster() {
                             openshift.withProject(){
                                 // Validando el Deployment
-                                // Ref: https://github.com/openshift/jenkins-client-plugin#looking-to-verify-a-deployment-or-service-we-can-still-do-that
                                 echo " --> Validando el status del Deployment"
                                 if (openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").exists()){
                                     def latestDeploymentVersion = openshift.selector('dc',"${APP_NAME}-${AMBIENTE}").object().status.latestVersion
@@ -303,7 +291,6 @@ spec:
                                     }
                                     
                                     def dc = openshift.selector('dc', "${APP_NAME}-${AMBIENTE}")
-                                    // this will wait until the desired replicas are available
                                     def status = dc.rollout().status()
                 
                                     // Validando el Service 
