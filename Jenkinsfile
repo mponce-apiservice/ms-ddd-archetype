@@ -26,7 +26,7 @@ spec:
     }
   }
     environment {
-        APP_NAME = "ms-core-archetype"
+        APP_NAME = ""
         APP_VERSION = ""
         IMAGE = ""
         REGISTRY = "331022218908.dkr.ecr.us-east-1.amazonaws.com"
@@ -45,7 +45,9 @@ spec:
             steps {
                 script {
                     IMAGEN = readMavenPom().getArtifactId()
-                    echo "Nombre del Artefacto: ${IMAGEN}"
+                    echo "Nombre del Artefacto Docker: ${IMAGEN}"
+                    APP_NAME = readMavenPom().getArtifactId()
+                    echo "Nombre del Artefacto Openshift: ${APP_NAME}"
                     APP_VERSION = readMavenPom().getVersion()
                     echo "Version actual: ${APP_VERSION}"
                 }
