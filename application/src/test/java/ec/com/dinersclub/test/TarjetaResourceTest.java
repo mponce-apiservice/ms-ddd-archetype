@@ -4,6 +4,8 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
+import java.util.UUID;
+
 import javax.ws.rs.core.MediaType;
 
 import org.junit.jupiter.api.Test;
@@ -14,31 +16,35 @@ import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
-public class FruitResourceTest {
+public class TarjetaResourceTest {
+	
+	private UUID c1 = UUID.randomUUID();
+	private UUID c2 = UUID.randomUUID();
+	private UUID c3 = UUID.randomUUID();
 	
 	@Test
     public void testAdd() {
         given()
-                .body("{\"id\": 1, \"name\": \"Apple\"}")
+                .body("{\"id\": \""+c1.toString()+"\", \"nombre\": \"Cliente 1\"}")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .when()
-                .post("/fruits")
+                .post("/tarjetas")
                 .then()
                 .statusCode(201);
 
         given()
-		        .body("{\"id\": 2, \"name\": \"Orange\"}")
+		        .body("{\"id\": \""+c2.toString()+"\", \"nombre\": \"Cliente 2\"}")
 		        .header("Content-Type", MediaType.APPLICATION_JSON)
 		        .when()
-		        .post("/fruits")
+		        .post("/tarjetas")
 		        .then()
 		        .statusCode(201);
         
         given()
-		        .body("{\"id\": 3, \"name\": \"Pear\"}")
+		        .body("{\"id\": \""+c3.toString()+"\", \"nombre\": \"Cliente 3\"}")
 		        .header("Content-Type", MediaType.APPLICATION_JSON)
 		        .when()
-		        .post("/fruits")
+		        .post("/tarjetas")
 		        .then()
 		        .statusCode(201);
     }
@@ -46,11 +52,11 @@ public class FruitResourceTest {
     @Test
     public void testList() {
         given()
-                .when().get("/fruits")
+                .when().get("/tarjetas")
                 .then()
                 .statusCode(200)
                 .body("$.size()", is(3),
-                        "name", containsInAnyOrder("Apple","Orange","Pear"));
+                        "nombre", containsInAnyOrder("Cliente 1","Cliente 2","Cliente 3"));
     }
 
     @Test
@@ -58,21 +64,21 @@ public class FruitResourceTest {
         given()
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .when()
-                .delete("/fruits/1")
+                .delete("/tarjetas/"+c1.toString())
                 .then()
                 .statusCode(200);
         
         given()
 		        .header("Content-Type", MediaType.APPLICATION_JSON)
 		        .when()
-		        .delete("/fruits/2")
+		        .delete("/tarjetas/"+c2.toString())
 		        .then()
 		        .statusCode(200);
         
         given()
 		        .header("Content-Type", MediaType.APPLICATION_JSON)
 		        .when()
-		        .delete("/fruits/3")
+		        .delete("/tarjetas/"+c3.toString())
 		        .then()
 		        .statusCode(200);
     }
