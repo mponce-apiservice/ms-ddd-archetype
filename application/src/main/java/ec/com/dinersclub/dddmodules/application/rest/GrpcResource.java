@@ -26,7 +26,7 @@ public class GrpcResource {
     }
     
     @POST
-    @Path("/tarjetas")
+    @Path("tarjetas")
     public Response add(@Valid CreateTarjetaCommand command) {
     	client.createTarjetaCommand(command);
     	return Response.status(201).build();
