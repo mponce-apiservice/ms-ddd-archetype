@@ -24,7 +24,7 @@ public class GrpcResourceTest {
              .body(is("Hello RESTEasy"));
     }
     
-    @Test
+    /*@Test
     public void testAdd() {
         given()
                 .body("{\"id\": \""+c1.toString()+"\", \"nombre\": \"Cliente 1\"}")
@@ -33,6 +33,6 @@ public class GrpcResourceTest {
                 .post("/grpc/tarjetas")
                 .then()
                 .statusCode(201);
-    }
+    }*/
 
 }

@@ -12,7 +12,7 @@ import ec.com.dinersclub.dddmodules.domain.model.Tarjeta;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
-@Table(name = "fruits")
+@Table(name = "tarjeta")
 public class TarjetaEntity extends PanacheEntityBase {
 	
 	@Id
