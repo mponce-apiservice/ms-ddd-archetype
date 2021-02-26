@@ -4,6 +4,8 @@ option java_multiple_files = true;
 option java_package = "ec.com.dinersclub.dddmodules.application.grpc";
 option java_outer_classname = "TarjetaProto";
 
+package grpc;
+
 service Tarjeta {
     rpc createTarjetaCommand (TarjetaRequest) returns (TarjetaResponse) {}
 }

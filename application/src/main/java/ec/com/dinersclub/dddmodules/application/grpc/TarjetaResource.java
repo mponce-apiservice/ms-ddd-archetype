@@ -2,8 +2,8 @@ package ec.com.dinersclub.dddmodules.application.grpc;
 
 import java.util.UUID;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
 import io.grpc.stub.StreamObserver;
@@ -14,7 +14,7 @@ import ec.com.dinersclub.dddmodules.application.grpc.TarjetaResponse;
 import ec.com.dinersclub.dddmodules.application.grpc.TarjetaRequest;
 
 
-@ApplicationScoped                                                                                    
+@Singleton                                                                                   
 public class TarjetaResource extends TarjetaGrpc.TarjetaImplBase {      
 	
 	@Inject
