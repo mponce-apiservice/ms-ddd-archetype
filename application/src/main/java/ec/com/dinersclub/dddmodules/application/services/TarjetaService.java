@@ -1,9 +1,11 @@
 package ec.com.dinersclub.dddmodules.application.services;
 
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateTarjetaCommand;
-import ec.com.dinersclub.dddmodules.application.grpc.TarjetaGrpc;
+import ec.com.dinersclub.dddmodules.application.grpc.MutinyTarjetaGrpc;
 import ec.com.dinersclub.dddmodules.application.grpc.TarjetaRequest;
+import ec.com.dinersclub.dddmodules.application.grpc.TarjetaResponse;
 import io.quarkus.grpc.runtime.annotations.GrpcService;
+import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -13,10 +15,11 @@ public class TarjetaService {
 
 	@Inject
     @GrpcService("tarjeta")                     
-    TarjetaGrpc.TarjetaBlockingStub grpc;
+	MutinyTarjetaGrpc.MutinyTarjetaStub grpc;
 	
-	public String createTarjetaCommand(CreateTarjetaCommand command) {
-		return grpc.createTarjetaCommand(TarjetaRequest.newBuilder().setId(command.getId().toString()).setNombre(command.getNombre()).build()).getId();  
+	public void createTarjetaCommand(CreateTarjetaCommand command) {
+		TarjetaResponse response = grpc.createTarjetaCommand(TarjetaRequest.newBuilder().setId(command.getId().toString()).setNombre(command.getNombre()).build()).await().indefinitely();
+		System.out.println(response.getId());
 	}
 	
 }

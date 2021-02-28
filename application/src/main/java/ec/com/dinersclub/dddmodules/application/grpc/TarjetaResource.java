@@ -6,29 +6,31 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
-import io.grpc.stub.StreamObserver;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.ITarjetaCommandService;
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateTarjetaCommand;
-import ec.com.dinersclub.dddmodules.application.grpc.TarjetaGrpc;
+import ec.com.dinersclub.dddmodules.application.grpc.MutinyTarjetaGrpc;
 import ec.com.dinersclub.dddmodules.application.grpc.TarjetaResponse;
 import ec.com.dinersclub.dddmodules.application.grpc.TarjetaRequest;
 
 
 @Singleton                                                                                   
-public class TarjetaResource extends TarjetaGrpc.TarjetaImplBase {      
+public class TarjetaResource extends MutinyTarjetaGrpc.TarjetaImplBase {      
 	
 	@Inject
 	ITarjetaCommandService writeService;
 
     @Override
-    public void createTarjetaCommand(TarjetaRequest request, StreamObserver<TarjetaResponse> responseObserver) { 
-    	
+    @Blocking
+    public Uni<TarjetaResponse> createTarjetaCommand(TarjetaRequest request) { 
+    	String id = request.getId();
+    	String nombre = request.getNombre();
         CreateTarjetaCommand command = new CreateTarjetaCommand();
-        command.setId(UUID.fromString(request.getId()));
-        command.setNombre(request.getNombre());
+        command.setId(UUID.fromString(id));
+        command.setNombre(nombre);
         writeService.createTarjetaCommand(command);
-        responseObserver.onNext(TarjetaResponse.newBuilder().setId(request.getId()).build());         
-        responseObserver.onCompleted();   
+        return Uni.createFrom().item(TarjetaResponse.newBuilder().setId(id).build());
         
     }
 }

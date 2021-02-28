@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateTarjetaCommand;
 import ec.com.dinersclub.dddmodules.application.services.TarjetaService;
+import io.smallrye.mutiny.Uni;
 
 @Path("/grpc")
 public class GrpcResource {
