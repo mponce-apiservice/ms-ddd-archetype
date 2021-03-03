@@ -131,22 +131,22 @@ spec:
                         }
                     }
                 }
-                // stage('Kiuwan Test'){
-                //     steps {
-                //         container('kiuwan') {
-                //             script {
-                //                 echo " --> Kiuwan Scan"
-                //                 // Ref: https://www.kiuwan.com/docs/display/K5/Jenkins+plugin
-                //                 kiuwan connectionProfileUuid: 'lYfV-SD13',
-                //                 sourcePath: 'folder/demo-app-repository',
-                //                 applicationName: 'Demo application',
-                //                 indicateLanguages: true,
-                //                 languages:'java,python',
-                //                 measure: 'NONE'
-                //             }
-                //         }
-                //     }
-                // }
+                stage('Kiuwan Test'){
+                    steps {
+                        container('kiuwan') {
+                            script {
+                                echo " --> Kiuwan Scan"
+                                // Ref: https://www.kiuwan.com/docs/display/K5/Jenkins+plugin
+                                kiuwan connectionProfileUuid: 'eh9q-SJTq',
+                                sourcePath: '',
+                                applicationName: 'ms-tarjeta-debito',
+                                indicateLanguages: true,
+                                languages:'java,python',
+                                measure: 'NONE'
+                            }
+                        }
+                    }
+                }
             }
         }
         stage('Stage: Package') { 
