@@ -26,7 +26,7 @@ spec:
     }
   }
     environment {
-        APP_NAME = "ms-core-archetype"
+        APP_NAME = ""
         APP_VERSION = ""
         IMAGE = ""
         REGISTRY = "331022218908.dkr.ecr.us-east-1.amazonaws.com"
@@ -45,7 +45,9 @@ spec:
             steps {
                 script {
                     IMAGEN = readMavenPom().getArtifactId()
-                    echo "Nombre del Artefacto: ${IMAGEN}"
+                    echo "Nombre del Artefacto Docker: ${IMAGEN}"
+                    APP_NAME = readMavenPom().getArtifactId()
+                    echo "Nombre del Artefacto Openshift: ${APP_NAME}"
                     APP_VERSION = readMavenPom().getVersion()
                     echo "Version actual: ${APP_VERSION}"
                 }
@@ -97,7 +99,12 @@ spec:
             steps {
                 script {
                     echo "Maven version release"
-                    sh "mvn --batch-mode release:update-versions"
+                    def branch = "${env.BRANCH_NAME}"
+                    if (branch != "master"){
+                    	sh "mvn --batch-mode release:update-versions"
+                    }else{
+                    	sh "mvn --batch-mode release:update-versions updateVersionsToSnapshot=false"
+                    }
                     APP_VERSION = readMavenPom().getVersion()
                     echo "Version nueva: ${APP_VERSION}"
                     
@@ -129,22 +136,22 @@ spec:
                         }
                     }
                 }
-                // stage('Kiuwan Test'){
-                //     steps {
-                //         container('kiuwan') {
-                //             script {
-                //                 echo " --> Kiuwan Scan"
-                //                 // Ref: https://www.kiuwan.com/docs/display/K5/Jenkins+plugin
-                //                 kiuwan connectionProfileUuid: 'lYfV-SD13',
-                //                 sourcePath: 'folder/demo-app-repository',
-                //                 applicationName: 'Demo application',
-                //                 indicateLanguages: true,
-                //                 languages:'java,python',
-                //                 measure: 'NONE'
-                //             }
-                //         }
-                //     }
-                // }
+                //stage('Kiuwan Test'){
+                //    steps {
+                //        container('kiuwan') {
+                //            script {
+                //                echo " --> Kiuwan Scan"
+                //                // Ref: https://www.kiuwan.com/docs/display/K5/Jenkins+plugin
+                //                kiuwan connectionProfileUuid: 'eh9q-SJTq',
+                //                sourcePath: '',
+                //                applicationName: 'ms-tarjeta-debito',
+                //                indicateLanguages: true,
+                //                languages:'java,python',
+                //                measure: 'NONE'
+                //            }
+                //        }
+                //    }
+                //}
             }
         }
         stage('Stage: Package') { 
@@ -157,33 +164,64 @@ spec:
                     sh "\\cp infrastructure/src/main/resources/META-INF/microprofile-config-dev.properties infrastructure/src/main/resources/META-INF/microprofile-config.properties"
                     sh "mvn clean package -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true"
                     
-                    echo "Docker Build..."
-                    sh "cd application && docker build -f src/main/docker/Dockerfile.jvm -t ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ."
-                    
-                    echo "Docker Tag..."
-                    sh "docker tag ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ${PUSH}:${APP_VERSION}-${AMBIENTE}"
-
-                    echo "Docker Push..."
-                    // Credentials
-                    withCredentials([usernamePassword(credentialsId: 'openshift-login', usernameVariable: 'USER_OPENSHIFT', passwordVariable: 'PASS_OPENSHIFT')]) {
-                        sh label: "",
-                            script: """
-                                #!/bin/bash
-
-                                set +xe
-                                
-                                echo " --> Login al Cluster..."
-                                oc login -u \$USER_OPENSHIFT -p \$PASS_OPENSHIFT ${URL_OPENSHIFT}
-
-                                PASS=\$( oc get secrets/aws-registry -o=go-template='{{index .data ".dockerconfigjson"}}' | base64 -d | jq -r ".[] | .[] | .password" )
-                                
-                                echo " --> Login al Registry..."
-                                echo \$PASS | docker login --username AWS --password-stdin https://${REGISTRY}
-
-                            """
+                    def branch = "${env.BRANCH_NAME}"
+                    if (branch != "master"){
+	                    echo "Docker Build..."
+	                    sh "cd application && docker build -f src/main/docker/Dockerfile.jvm -t ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ."
+	                    
+	                    echo "Docker Tag..."
+	                    sh "docker tag ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ${PUSH}:${APP_VERSION}-${AMBIENTE}"
+	
+	                    echo "Docker Push..."
+	                    // Credentials
+	                    withCredentials([usernamePassword(credentialsId: 'openshift-login', usernameVariable: 'USER_OPENSHIFT', passwordVariable: 'PASS_OPENSHIFT')]) {
+	                        sh label: "",
+	                            script: """
+	                                #!/bin/bash
+	
+	                                set +xe
+	                                
+	                                echo " --> Login al Cluster..."
+	                                oc login -u \$USER_OPENSHIFT -p \$PASS_OPENSHIFT ${URL_OPENSHIFT}
+	
+	                                PASS=\$( oc get secrets/aws-registry -o=go-template='{{index .data ".dockerconfigjson"}}' | base64 -d | jq -r ".[] | .[] | .password" )
+	                                
+	                                echo " --> Login al Registry..."
+	                                echo \$PASS | docker login --username AWS --password-stdin https://${REGISTRY}
+	
+	                            """
+	                    }
+	
+	                    sh "docker push ${PUSH}:${APP_VERSION}-${AMBIENTE}"
+                    }else{
+                    	echo "Docker Build..."
+	                    sh "cd application && docker build -f src/main/docker/Dockerfile.jvm -t ${APP_NAME}:${APP_VERSION} ."
+	                    
+	                    echo "Docker Tag..."
+	                    sh "docker tag ${APP_NAME}:${APP_VERSION} ${PUSH}:${APP_VERSION}"
+	
+	                    echo "Docker Push..."
+	                    // Credentials
+	                    withCredentials([usernamePassword(credentialsId: 'openshift-login', usernameVariable: 'USER_OPENSHIFT', passwordVariable: 'PASS_OPENSHIFT')]) {
+	                        sh label: "",
+	                            script: """
+	                                #!/bin/bash
+	
+	                                set +xe
+	                                
+	                                echo " --> Login al Cluster..."
+	                                oc login -u \$USER_OPENSHIFT -p \$PASS_OPENSHIFT ${URL_OPENSHIFT}
+	
+	                                PASS=\$( oc get secrets/aws-registry -o=go-template='{{index .data ".dockerconfigjson"}}' | base64 -d | jq -r ".[] | .[] | .password" )
+	                                
+	                                echo " --> Login al Registry..."
+	                                echo \$PASS | docker login --username AWS --password-stdin https://${REGISTRY}
+	
+	                            """
+	                    }
+	
+	                    sh "docker push ${PUSH}:${APP_VERSION}"
                     }
-
-                    sh "docker push ${PUSH}:${APP_VERSION}-${AMBIENTE}"
 
                 }
             }
@@ -211,9 +249,14 @@ spec:
                                             # KLAR_TRACE=true
                                         
                                             PASS=\$( oc get secrets/aws-registry -o=go-template='{{index .data ".dockerconfigjson"}}' | base64 -d | jq -r ".[] | .[] | .password" )
-
-                                            echo " --> Scanning image ${APP_NAME}-${AMBIENTE}:${APP_VERSION}..."
-                                            SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}:${APP_VERSION}-${AMBIENTE} )
+											
+                    						if [ "${env.BRANCH_NAME}" != "master" ]; then
+                                            	echo " --> Scanning image ${APP_NAME}-${AMBIENTE}:${APP_VERSION}..."
+                                            	SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}:${APP_VERSION}-${AMBIENTE} )
+                                            else
+                                            	echo " --> Scanning image ${APP_NAME}:${APP_VERSION}..."
+                                            	SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}:${APP_VERSION} )
+                                            fi
                                             
                                             echo " --> Resultado del Scan: \$SCAN"
 
@@ -239,6 +282,11 @@ spec:
             }
         }
         stage('Stage: Deployment') {
+            when { 
+                not { 
+                    branch 'master' 
+                }
+            }
             steps {
                 container('tools') {
                     script {
@@ -353,7 +401,13 @@ spec:
                     echo " --> Release..."
                     echo "Maven version release"
                     sh "mvn --batch-mode release:update-versions -DdevelopmentVersion=${APP_VERSION}"
-                    def release = "v${APP_VERSION}-${env.BRANCH_NAME}"
+                    def branch = "${env.BRANCH_NAME}"
+                    def release = "release"
+                    if (branch != "master"){
+                    	release = "v${APP_VERSION}-${env.BRANCH_NAME}"
+                    }else{
+                    	release = "v${APP_VERSION}"
+                    }
                     
                     echo "Remove .properties microprofile"
                     sh "rm -rf infrastructure/src/main/resources/META-INF/microprofile-config.properties"

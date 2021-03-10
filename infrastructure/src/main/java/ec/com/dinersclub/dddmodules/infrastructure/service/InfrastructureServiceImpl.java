@@ -1,58 +1,58 @@
 package ec.com.dinersclub.dddmodules.infrastructure.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import ec.com.dinersclub.dddmodules.domain.model.Fruit;
+import ec.com.dinersclub.dddmodules.domain.model.Tarjeta;
 import ec.com.dinersclub.dddmodules.domain.repository.IRepository;
-import ec.com.dinersclub.dddmodules.infrastructure.pgsql.entities.FruitEntity;
-import ec.com.dinersclub.dddmodules.infrastructure.pgsql.repository.FruitRepository;
+import ec.com.dinersclub.dddmodules.infrastructure.pgsql.entities.TarjetaEntity;
+import ec.com.dinersclub.dddmodules.infrastructure.pgsql.repository.TarjetaRepository;
 import ec.com.dinersclub.dddmodules.infrastructure.redis.RedisRepository;
 
 @ApplicationScoped
 public class InfrastructureServiceImpl implements IRepository {
 	
 	@Inject
-	FruitRepository fruitRepository;
+	TarjetaRepository tarjetaRepository;
 	
 	@Inject
 	RedisRepository redisRepository;
 
 	@Override
 	public void delCache(String key) {
-		//redisRepository.del(key);
+		redisRepository.del(key);
 	}
 
 	@Override
 	public String getCache(String key) {
-		//return redisRepository.get(key);
-		return null;
+		return redisRepository.get(key);
 	}
 
 	@Override
 	public void setCache(String key, String value) {
-		//redisRepository.set(key, value);
+		redisRepository.set(key, value);
 	}
 
 	@Override
-	public List<Fruit> getFruits() {
-		List<FruitEntity> fruitEntityList = fruitRepository.listAll();
-		if (!fruitEntityList.isEmpty()) {
-			return FruitEntity
-					.map(fruitEntityList);
+	public List<Tarjeta> getTarjetas() {
+		List<TarjetaEntity> tarjetaEntityList = tarjetaRepository.listAll();
+		if (!tarjetaEntityList.isEmpty()) {
+			return TarjetaEntity
+					.map(tarjetaEntityList);
 		} else {
             return null;
         }
 	}
     
 	@Override
-	public Fruit getFruit(int id) {
-		FruitEntity fruitEntity = fruitRepository.findById(id);
-        if (fruitEntity != null) {
-            return fruitEntity.toFruit();
+	public Tarjeta getTarjeta(UUID id) {
+		TarjetaEntity tarjetaEntity = tarjetaRepository.findById(id);
+        if (tarjetaEntity != null) {
+            return tarjetaEntity.toTarjeta();
         } else {
             return null;
         }
@@ -60,14 +60,14 @@ public class InfrastructureServiceImpl implements IRepository {
 
 	@Override
 	@Transactional
-	public void createFruit(Fruit fruit) {
-		FruitEntity.persist(new FruitEntity(fruit));
+	public void createTarjeta(Tarjeta tarjeta) {
+		TarjetaEntity.persist(new TarjetaEntity(tarjeta));
 	}
 
 	@Override
 	@Transactional
-	public void deleteFruit(int id) {
-		FruitEntity.delete("id", id);
+	public void deleteTarjeta(UUID id) {
+		TarjetaEntity.delete("id", id);
 	}
 
 }

@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateFruitCommand;
+import ec.com.dinersclub.dddmodules.application.cqrs.commands.dto.CreateTarjetaCommand;
 import ec.com.dinersclub.dddmodules.application.events.audit.IAuditoriaEvent;
 import ec.com.dinersclub.dddmodules.application.events.audit.dto.Auditoria;
 
@@ -28,7 +28,7 @@ public class AuditResource {
 
 
     @POST
-    public Response add(@Valid CreateFruitCommand command) {
+    public Response add(@Valid CreateTarjetaCommand command) {
     	
     	Auditoria aud = new Auditoria();
     	aud.microservice = microservice;
