@@ -1,18 +1,19 @@
 package ec.com.dinersclub.dddmodules.domain.repository;
 
 import java.util.List;
+import java.util.UUID;
 
-import ec.com.dinersclub.dddmodules.domain.model.Fruit;
+import ec.com.dinersclub.dddmodules.domain.model.Tarjeta;
 
 public interface IRepository {
 	
-	List<Fruit> getFruits();
+	List<Tarjeta> getTarjetas();
 	
-    Fruit getFruit(int id);
+    Tarjeta getTarjeta(UUID id);
 
-    void createFruit(Fruit fruit);
+    void createTarjeta(Tarjeta tarjeta);
     
-    void deleteFruit(int id);
+    void deleteTarjeta(UUID id);
     
     void delCache(String key);
 
