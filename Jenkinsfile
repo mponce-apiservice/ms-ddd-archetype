@@ -174,7 +174,7 @@ spec:
 	                    sh "cd application && docker build -f src/main/docker/Dockerfile.jvm -t ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ."
 	                    
 	                    echo "Docker Tag..."
-	                    sh "docker tag ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ${PUSH}:${APP_VERSION}-${AMBIENTE}"
+	                    sh "docker tag ${APP_NAME}-${AMBIENTE}:${APP_VERSION} ${PUSH}/${APP_NAME}:${APP_VERSION}-${AMBIENTE}"
 	
 	                    echo "Docker Push..."
 	                    // Credentials
@@ -196,13 +196,13 @@ spec:
 	                            """
 	                    }
 	
-	                    sh "docker push ${PUSH}:${APP_VERSION}-${AMBIENTE}"
+	                    sh "docker push ${PUSH}/${APP_NAME}:${APP_VERSION}-${AMBIENTE}"
                     }else{
                     	echo "Docker Build..."
 	                    sh "cd application && docker build -f src/main/docker/Dockerfile.jvm -t ${APP_NAME}:${APP_VERSION} ."
 	                    
 	                    echo "Docker Tag..."
-	                    sh "docker tag ${APP_NAME}:${APP_VERSION} ${PUSH}:${APP_VERSION}"
+	                    sh "docker tag ${APP_NAME}:${APP_VERSION} ${PUSH}/${APP_NAME}:${APP_VERSION}"
 	
 	                    echo "Docker Push..."
 	                    // Credentials
@@ -224,7 +224,7 @@ spec:
 	                            """
 	                    }
 	
-	                    sh "docker push ${PUSH}:${APP_VERSION}"
+	                    sh "docker push ${PUSH}/${APP_NAME}:${APP_VERSION}"
                     }
 
                 }
@@ -251,10 +251,10 @@ spec:
 											
                     						if [ "${env.BRANCH_NAME}" != "master" ]; then
                                             	echo " --> Scanning image ${APP_NAME}-${AMBIENTE}:${APP_VERSION}..."
-                                            	SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}:${APP_VERSION}-${AMBIENTE} )
+                                            	SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}/${APP_NAME}:${APP_VERSION}-${AMBIENTE} )
                                             else
                                             	echo " --> Scanning image ${APP_NAME}:${APP_VERSION}..."
-                                            	SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}:${APP_VERSION} )
+                                            	SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}/${APP_NAME}:${APP_VERSION} )
                                             fi
                                             
                                             echo " --> Resultado del Scan: \$SCAN"
@@ -296,7 +296,7 @@ spec:
                                     
                                     // DeploymemtConfig
                                     echo " --> Deploy..."
-                                    def app = openshift.newApp("--file=./k8s/template.yaml", "--param=APP_NAME=${APP_NAME}-${AMBIENTE}", "--param=APP_VERSION=${APP_VERSION}", "--param=AMBIENTE=${AMBIENTE}", "--param=REGISTRY=${PUSH}:${APP_VERSION}-${AMBIENTE}" )
+                                    def app = openshift.newApp("--file=./k8s/template.yaml", "--param=APP_NAME=${APP_NAME}-${AMBIENTE}", "--param=APP_VERSION=${APP_VERSION}", "--param=AMBIENTE=${AMBIENTE}", "--param=REGISTRY=${PUSH}/${APP_NAME}:${APP_VERSION}-${AMBIENTE}" )
                                     
                                     def dc = openshift.selector("dc", "${APP_NAME}-${AMBIENTE}")
                                     while (dc.object().spec.replicas != dc.object().status.availableReplicas) {
@@ -308,7 +308,7 @@ spec:
                                     echo " --> Ya existe el Deployment $APP_NAME-${AMBIENTE}!"
 
                                     echo " --> Updating image version..."
-                                    openshift.set("image", "dc/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
+                                    openshift.set("image", "dc/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}/${APP_NAME}:${APP_VERSION}-${AMBIENTE}", "--record")
                                 }
                             }
                         }
