@@ -230,9 +230,6 @@ spec:
             }
         }
         stage('Stage: Validate') {
-        	agent { 
-                label "${jenkinsWorker}"
-            }
             stages {
                 stage("Container Scanner") {
                     steps {
