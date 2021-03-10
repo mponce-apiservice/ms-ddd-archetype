@@ -64,7 +64,7 @@ spec:
                         AMBIENTE = 'dev'
                         // NAMESPACE = 'develop'
                         break
-                    case "release/*": 
+                    case 'release': 
                         AMBIENTE = 'qa'
                         // NAMESPACE = 'qa'
                         break
@@ -76,13 +76,9 @@ spec:
                         AMBIENTE = 'preprod'
                         // NAMESPACE = 'preproduction'
                         break  
-                    case "master": 
+                    case 'master': 
                         AMBIENTE = 'prod' 
                         // NAMESPACE = 'production'
-                        break
-                    // Prueba
-                    case "feature/jenkins": 
-                        AMBIENTE = 'cicd'
                         break
                     default:
                         println("Branch value error: " + branch)
