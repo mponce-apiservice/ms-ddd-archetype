@@ -103,6 +103,7 @@ spec:
                     }else if(branch == "master"){
                         def values = '${APP_VERSION}'.split('-')
                         APP_VERSION = values[0]
+                        echo "Version estable: ${APP_VERSION}"
                     }
                     
                     sh '\\cp infrastructure/src/main/resources/META-INF/microprofile-config-test.properties infrastructure/src/main/resources/META-INF/microprofile-config.properties'
