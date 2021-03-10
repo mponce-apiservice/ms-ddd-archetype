@@ -361,10 +361,8 @@ spec:
             agent { 
                 label "${jenkinsWorker}"
             }
-            when { 
-                not { 
-                    branch 'master' 
-                }
+            when {
+                branch 'release'
             }
             steps {
                 script {
@@ -378,9 +376,7 @@ spec:
                 label "${jenkinsWorker}"
             }
             when { 
-                not { 
-                    branch 'master' 
-                }
+                branch 'release'
             }
             steps {
                 script {
