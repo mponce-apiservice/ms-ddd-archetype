@@ -102,7 +102,7 @@ spec:
                     def branch = "${env.BRANCH_NAME}"
                     if (branch != "master"){
                     	sh "mvn --batch-mode release:update-versions"
-                    else{
+                    }else{
                     	sh "mvn --batch-mode release:update-versions updateVersionsToSnapshot=false"
                     }
                     APP_VERSION = readMavenPom().getVersion()
@@ -250,14 +250,14 @@ spec:
                                         
                                             PASS=\$( oc get secrets/aws-registry -o=go-template='{{index .data ".dockerconfigjson"}}' | base64 -d | jq -r ".[] | .[] | .password" )
 											
-											def branch = "${env.BRANCH_NAME}"
-                    						if (branch != "master"){
+                    						if [ "${env.BRANCH_NAME}" != "master" ]; then
                                             	echo " --> Scanning image ${APP_NAME}-${AMBIENTE}:${APP_VERSION}..."
                                             	SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}:${APP_VERSION}-${AMBIENTE} )
-                                            }else{
+                                            else
                                             	echo " --> Scanning image ${APP_NAME}:${APP_VERSION}..."
                                             	SCAN=\$( CLAIR_ADDR=http://\$(oc get svc -l app=clair | awk '{print \$1}' | tail -1):6060 DOCKER_USER=AWS DOCKER_PASSWORD=\$PASS JSON_OUTPUT=true klar ${PUSH}:${APP_VERSION} )
-                                            }
+                                            fi
+                                            
                                             echo " --> Resultado del Scan: \$SCAN"
 
                                             echo " --> Validando el Scan..."
