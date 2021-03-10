@@ -68,17 +68,16 @@ spec:
                         AMBIENTE = 'qa'
                         // NAMESPACE = 'qa'
                         break
-                    case 'release2/*': 
+                    case 'uat': 
                         AMBIENTE = 'uat'
                         // NAMESPACE = 'uat'
                         break
-                    case 'release3/*': 
+                    case 'preprod': 
                         AMBIENTE = 'preprod'
                         // NAMESPACE = 'preproduction'
                         break  
                     case 'master': 
-                        AMBIENTE = 'prod' 
-                        // NAMESPACE = 'production'
+                        AMBIENTE = 'master'
                         break
                     default:
                         println("Branch value error: " + branch)
@@ -94,24 +93,29 @@ spec:
             }
             steps {
                 script {
-                    echo "Maven version release"
+                    
                     def branch = "${env.BRANCH_NAME}"
-                    if (branch != "master"){
+                    if (branch == "develop"){
+                        echo "Maven version release"
                     	sh "mvn --batch-mode release:update-versions"
-                    }else{
-                    	sh "mvn --batch-mode release:update-versions updateVersionsToSnapshot=false"
+                    	APP_VERSION = readMavenPom().getVersion()
+                        echo "Version nueva: ${APP_VERSION}"
                     }
-                    APP_VERSION = readMavenPom().getVersion()
-                    echo "Version nueva: ${APP_VERSION}"
                     
                     sh '\\cp infrastructure/src/main/resources/META-INF/microprofile-config-test.properties infrastructure/src/main/resources/META-INF/microprofile-config.properties'
                     sh 'mvn clean package -Dmaven.test.skip=true -Dmaven.test.failure.ignore=true'
+                    
                 }
             }
         }
         stage('Stage: Test'){
             agent { 
                 label "${jenkinsWorker}"
+            }
+            when { 
+                not { 
+                    branch 'master' 
+                }
             }
             stages {
                 stage("Unit Test") {
@@ -133,6 +137,9 @@ spec:
                     }
                 }
                 //stage('Kiuwan Test'){
+                //    agent { 
+                //        label "${jenkinsWorker}"
+                //    }
                 //    steps {
                 //        container('kiuwan') {
                 //            script {
@@ -223,10 +230,8 @@ spec:
             }
         }
         stage('Stage: Validate') {
-            when { 
-                not { 
-                    branch 'master' 
-                }
+        	agent { 
+                label "${jenkinsWorker}"
             }
             stages {
                 stage("Container Scanner") {
@@ -278,6 +283,9 @@ spec:
             }
         }
         stage('Stage: Deployment') {
+            agent { 
+                label "${jenkinsWorker}"
+            }
             when { 
                 not { 
                     branch 'master' 
@@ -314,6 +322,9 @@ spec:
             }
         }
         stage('Stage: Deployment Test') {
+            agent { 
+                label "${jenkinsWorker}"
+            }
             when { 
                 not { 
                     branch 'master' 
@@ -395,9 +406,13 @@ spec:
             steps {
                 script {
                     echo " --> Release..."
-                    echo "Maven version release"
-                    sh "mvn --batch-mode release:update-versions -DdevelopmentVersion=${APP_VERSION}"
                     def branch = "${env.BRANCH_NAME}"
+                    
+                    if (branch == "develop"){
+                    	echo "Maven version release"
+                    	sh "mvn --batch-mode release:update-versions -DdevelopmentVersion=${APP_VERSION}"
+                    }
+                    
                     def release = "release"
                     if (branch != "master"){
                     	release = "v${APP_VERSION}-${env.BRANCH_NAME}"
@@ -430,6 +445,9 @@ spec:
             }
         }
         stage('Stage: Rollback') {
+            agent { 
+                label "${jenkinsWorker}"
+            }
             steps {
                 container('tools') {
                     timeout(time: 5, unit: 'MINUTES') {
