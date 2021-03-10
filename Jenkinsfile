@@ -433,8 +433,11 @@ spec:
         }
         stage('Stage: Rollback') {
             when { 
-                not { 
-                    branch 'master' 
+                not {
+                    anyOf { 
+                        branch 'develop'
+                        branch 'master'
+                    }
                 }
             }
             steps {
