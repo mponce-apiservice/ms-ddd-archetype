@@ -280,9 +280,6 @@ spec:
             }
         }
         stage('Stage: Deployment') {
-            agent { 
-                label "${jenkinsWorker}"
-            }
             when { 
                 not { 
                     branch 'master' 
@@ -319,9 +316,6 @@ spec:
             }
         }
         stage('Stage: Deployment Test') {
-            agent { 
-                label "${jenkinsWorker}"
-            }
             when { 
                 not { 
                     branch 'master' 
@@ -442,8 +436,10 @@ spec:
             }
         }
         stage('Stage: Rollback') {
-            agent { 
-                label "${jenkinsWorker}"
+            when { 
+                not { 
+                    branch 'master' 
+                }
             }
             steps {
                 container('tools') {
