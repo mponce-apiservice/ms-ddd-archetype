@@ -97,7 +97,7 @@ spec:
                     def branch = "${env.BRANCH_NAME}"
                     if (branch == "develop"){
                         echo "Maven version release"
-                    	sh "mvn --batch-mode release:update-versions"
+                    	sh "mvn --batch-mode release:update-versions updateVersionsToSnapshot=false"
                     	APP_VERSION = readMavenPom().getVersion()
                         echo "Version nueva: ${APP_VERSION}"
                     }
