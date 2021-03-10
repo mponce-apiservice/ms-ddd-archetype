@@ -150,7 +150,7 @@ spec:
                                 sourcePath: 'application/src',
                                 applicationName: '${APP_NAME}',
                                 indicateLanguages: true,
-                                languages:'java,python',
+                                languages:'java',
                                 measure: 'NONE'
                             }
                         //}
