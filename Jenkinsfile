@@ -101,7 +101,7 @@ spec:
                     	APP_VERSION = readMavenPom().getVersion()
                         echo "Version nueva: ${APP_VERSION}"
                     }else if(branch == "master"){
-                        def values = '${APP_VERSION}'.split('-')
+                        def values = APP_VERSION.split('-')
                         APP_VERSION = values[0]
                         echo "Version estable: ${APP_VERSION}"
                     }
