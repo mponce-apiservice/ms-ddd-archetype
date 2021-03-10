@@ -142,7 +142,7 @@ spec:
                 }
                 stage('Kiuwan Test'){
                     steps {
-                        container('kiuwan') {
+                        //container('kiuwan') {
                             script {
                                 echo " --> Kiuwan Scan"
                                 // Ref: https://www.kiuwan.com/docs/display/K5/Jenkins+plugin
@@ -153,7 +153,7 @@ spec:
                                 languages:'java,python',
                                 measure: 'NONE'
                             }
-                        }
+                        //}
                     }
                 }
             }
