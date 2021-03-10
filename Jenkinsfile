@@ -418,11 +418,11 @@ spec:
                             
                             git config --local credential.helper "!f() { echo username=\\${GIT_USERNAME}; echo password=\\${GIT_PASSWORD}; }; f"
                             
-                            if (branch == "develop"){
+                            if [ "${env.BRANCH_NAME}" == "develop" ]; then
                             	git add -A
 								git commit -m "add release ${release}"
 								git push --force origin HEAD:${env.BRANCH_NAME}
-							}
+							fi
                             
                             git tag ${release}
                             git push --force origin ${release}
