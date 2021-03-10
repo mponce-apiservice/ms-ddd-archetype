@@ -148,7 +148,7 @@ spec:
                                 // Ref: https://www.kiuwan.com/docs/display/K5/Jenkins+plugin
                                 kiuwan connectionProfileUuid: 'eh9q-SJTq',
                                 sourcePath: 'application/src/main/java/',
-                                applicationName: ${APP_NAME},
+                                applicationName: "${APP_NAME}",
                                 indicateLanguages: true,
                                 languages:'java',
                                 measure: 'NONE'
