@@ -100,6 +100,9 @@ spec:
                     	sh "mvn --batch-mode release:update-versions"
                     	APP_VERSION = readMavenPom().getVersion()
                         echo "Version nueva: ${APP_VERSION}"
+                    }else if(branch == "master"){
+                        def values = '${APP_VERSION}'.split('-')
+                        APP_VERSION = values[0]
                     }
                     
                     sh '\\cp infrastructure/src/main/resources/META-INF/microprofile-config-test.properties infrastructure/src/main/resources/META-INF/microprofile-config.properties'
