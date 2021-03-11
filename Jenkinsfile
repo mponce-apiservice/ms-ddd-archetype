@@ -359,6 +359,9 @@ spec:
             }
         }
         stage('Stage: Functional Test') {
+            agent { 
+                label "${jenkinsWorker}"
+            }
             //when {
             //    branch 'release'
             //}
