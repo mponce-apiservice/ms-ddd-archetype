@@ -359,9 +359,9 @@ spec:
             }
         }
         stage('Stage: Functional Test') {
-            when {
-                branch 'release'
-            }
+            //when {
+            //    branch 'release'
+            //}
             steps {
                 script {
                     try {
@@ -381,9 +381,9 @@ spec:
             agent { 
                 label "${jenkinsWorker}"
             }
-            when { 
-                branch 'release'
-            }
+            //when { 
+            //    branch 'release'
+            //}
             steps {
                 script {
                     echo " --> Reporte Cucumber..."
