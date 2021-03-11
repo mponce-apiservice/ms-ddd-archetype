@@ -390,8 +390,7 @@ spec:
             steps {
                 script {
                     echo " --> Reporte Cucumber..."
-                    // cucumber '**/cucumber.json'
-                    // cucumber fileIncludePattern: '**/target/cucumber.json', sortingMethod: 'ALPHABETICAL'
+                    echo "REPORT-TEST: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}cucumber-html-reports/overview-features.html"
                 }
             }
         }
