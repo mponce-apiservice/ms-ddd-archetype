@@ -359,16 +359,21 @@ spec:
             }
         }
         stage('Stage: Functional Test') {
-            agent { 
-                label "${jenkinsWorker}"
-            }
             when {
                 branch 'release'
             }
             steps {
                 script {
-                    echo " --> Cucumber Test..."
-                    // sh "mvn functional-test"
+                    try {
+						sh 'cd test/integration && npm install'
+                        sh 'cd test/integration && npm test'
+			    
+						sh 'cd test/integration && cp reports.json $WORKSPACE'
+                        cucumber buildStatus: 'SUCCESS', fileIncludePattern: 'reports.json'
+                    } catch (e) {
+						sh 'cd test/integration && cp reports.json $WORKSPACE'
+                        cucumber buildStatus: 'FAIL', fileIncludePattern: 'reports.json'
+                    }
                 }
             }
         }
