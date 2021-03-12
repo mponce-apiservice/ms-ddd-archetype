@@ -237,7 +237,7 @@ spec:
                         container('tools') {
                             script {
                                 openshift.withCluster() {
-                                    openshift.withProject() {
+                                    openshift.withProject(${NAMESPACE}) {
                                         echo "Stage Clair..."
                                         sh label: "",
                                         script: """
@@ -290,7 +290,7 @@ spec:
                 container('tools') {
                     script {
                         openshift.withCluster() {
-                            openshift.withProject() {
+                            openshift.withProject(${NAMESPACE}) {
                                 // Validando
                                 if (!openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").exists()){
                                     
@@ -329,7 +329,7 @@ spec:
                 container('tools') {
                     script {
                         openshift.withCluster() {
-                            openshift.withProject(){
+                            openshift.withProject(${NAMESPACE}){
                                 // Validando el Deployment
                                 echo " --> Validando el status del Deployment"
                                 if (openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").exists()){
@@ -458,7 +458,7 @@ spec:
                     timeout(time: 5, unit: 'MINUTES') {
                         script {
                             openshift.withCluster() {
-                                openshift.withProject(){
+                                openshift.withProject(${NAMESPACE}){
                                     def userInputDeploy = ""
 
                                     userInputDeploy = input(
