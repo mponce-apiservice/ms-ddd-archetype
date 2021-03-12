@@ -286,7 +286,7 @@ spec:
                 container('tools') {
                     script {
                         openshift.withCluster() {
-                            openshift.withProject(${NAMESPACE}) {
+                            openshift.withProject("${NAMESPACE}") {
                                 // Validando
                                 if (!openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").exists()){
                                     
@@ -325,7 +325,7 @@ spec:
                 container('tools') {
                     script {
                         openshift.withCluster() {
-                            openshift.withProject(${NAMESPACE}){
+                            openshift.withProject("${NAMESPACE}"){
                                 // Validando el Deployment
                                 echo " --> Validando el status del Deployment"
                                 if (openshift.selector("dc", "${APP_NAME}-${AMBIENTE}").exists()){
@@ -454,7 +454,7 @@ spec:
                     timeout(time: 5, unit: 'MINUTES') {
                         script {
                             openshift.withCluster() {
-                                openshift.withProject(${NAMESPACE}){
+                                openshift.withProject("${NAMESPACE}"){
                                     def userInputDeploy = ""
 
                                     userInputDeploy = input(
