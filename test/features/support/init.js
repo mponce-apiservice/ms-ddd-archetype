@@ -1,6 +1,6 @@
 'use strict';
 
-const apickli = require('../apickli/apickli.js');
+const apickli = require('apickli/apickli.js');
 const {defineSupportCode} = require('cucumber');
 
 
