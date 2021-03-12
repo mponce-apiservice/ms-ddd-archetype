@@ -24,6 +24,10 @@ nb-configuration.xml
 .vscode
 .factorypath
 
+# Nodejs
+/node_modules
+package-lock.json
+
 # OSX
 .DS_Store
 
