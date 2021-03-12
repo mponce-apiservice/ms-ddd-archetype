@@ -44,8 +44,8 @@ spec:
             agent any
             steps {
                 script {
-                    IMAGEN = readMavenPom().getArtifactId()
-                    echo "Nombre del Artefacto Docker: ${IMAGEN}"
+                    //IMAGEN = readMavenPom().getArtifactId()
+                    //echo "Nombre del Artefacto Docker: ${IMAGEN}"
                     APP_NAME = readMavenPom().getArtifactId()
                     echo "Nombre del Artefacto Openshift: ${APP_NAME}"
                     APP_VERSION = readMavenPom().getVersion()
@@ -101,7 +101,7 @@ spec:
                     	APP_VERSION = readMavenPom().getVersion()
                         echo "Version nueva: ${APP_VERSION}"
                     }else if(branch == "master"){
-                        def values = '${APP_VERSION}'.split('-')
+                        def values = APP_VERSION.split('-')
                         APP_VERSION = values[0]
                         echo "Version estable: ${APP_VERSION}"
                     }
@@ -140,25 +140,22 @@ spec:
                         }
                     }
                 }
-                //stage('Kiuwan Test'){
-                //    agent { 
-                //        label "${jenkinsWorker}"
-                //    }
-                //    steps {
-                //        container('kiuwan') {
-                //            script {
-                //                echo " --> Kiuwan Scan"
-                //                // Ref: https://www.kiuwan.com/docs/display/K5/Jenkins+plugin
-                //                kiuwan connectionProfileUuid: 'eh9q-SJTq',
-                //                sourcePath: '',
-                //                applicationName: 'ms-tarjeta-debito',
-                //                indicateLanguages: true,
-                //                languages:'java,python',
-                //                measure: 'NONE'
-                //            }
-                //        }
-                //    }
-                //}
+                stage('Kiuwan Test'){
+                    steps {
+                        //container('kiuwan') {
+                            script {
+                                echo " --> Kiuwan Scan"
+                                // Ref: https://www.kiuwan.com/docs/display/K5/Jenkins+plugin
+                                kiuwan connectionProfileUuid: 'eh9q-SJTq',
+                                sourcePath: '/',
+                                applicationName: "${APP_NAME}",
+                                indicateLanguages: true,
+                                languages:'java',
+                                measure: 'NONE'
+                            }
+                        //}
+                    }
+                }
             }
         }
         stage('Stage: Package') { 
@@ -299,7 +296,7 @@ spec:
                                     
                                     // DeploymemtConfig
                                     echo " --> Deploy..."
-                                    def app = openshift.newApp("--file=./k8s/template.yaml", "--param=APP_NAME=${APP_NAME}-${AMBIENTE}", "--param=APP_VERSION=${APP_VERSION}", "--param=AMBIENTE=${AMBIENTE}", "--param=REGISTRY=${PUSH}:${APP_VERSION}-${AMBIENTE}" )
+                                    def app = openshift.newApp("--file=./openshift/template.yaml", "--param=APP_NAME=${APP_NAME}-${AMBIENTE}", "--param=APP_VERSION=${APP_VERSION}", "--param=AMBIENTE=${AMBIENTE}", "--param=REGISTRY=${PUSH}:${APP_VERSION}-${AMBIENTE}" )
                                     
                                     def dc = openshift.selector("dc", "${APP_NAME}-${AMBIENTE}")
                                     while (dc.object().spec.replicas != dc.object().status.availableReplicas) {
@@ -310,8 +307,11 @@ spec:
                                 else {
                                     echo " --> Ya existe el Deployment $APP_NAME-${AMBIENTE}!"
 
-                                    echo " --> Updating image version..."
-                                    openshift.set("image", "dc/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
+                                    //echo " --> Updating image version..."
+                                    //openshift.set("image", "dc/${APP_NAME}-${AMBIENTE}", "${APP_NAME}-${AMBIENTE}=${PUSH}:${APP_VERSION}-${AMBIENTE}", "--record")
+                                    
+                                    echo " --> Updating Deployment..."
+                                    sh "oc process -f ./openshift/template.yaml -p APP_NAME=${APP_NAME}-${AMBIENTE} -p APP_VERSION=${APP_VERSION} -p AMBIENTE=${AMBIENTE} -p REGISTRY=${PUSH}:${APP_VERSION}-${AMBIENTE} | oc apply -f -"
                                 }
                             }
                         }
@@ -370,8 +370,16 @@ spec:
             }
             steps {
                 script {
-                    echo " --> Cucumber Test..."
-                    // sh "mvn functional-test"
+                    try {
+						sh 'cd test/integration && npm install'
+                        sh 'cd test/integration && npm test'
+			    
+						sh 'cd test/integration && cp reports.json $WORKSPACE'
+                        cucumber buildStatus: 'SUCCESS', fileIncludePattern: 'reports.json'
+                    } catch (e) {
+						sh 'cd test/integration && cp reports.json $WORKSPACE'
+                        cucumber buildStatus: 'FAIL', fileIncludePattern: 'reports.json'
+                    }
                 }
             }
         }
@@ -385,8 +393,7 @@ spec:
             steps {
                 script {
                     echo " --> Reporte Cucumber..."
-                    // cucumber '**/cucumber.json'
-                    // cucumber fileIncludePattern: '**/target/cucumber.json', sortingMethod: 'ALPHABETICAL'
+                    echo "REPORT-TEST: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}cucumber-html-reports/overview-features.html"
                 }
             }
         }
