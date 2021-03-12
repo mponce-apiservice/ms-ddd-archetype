@@ -371,13 +371,13 @@ spec:
             steps {
                 script {
                     try {
-						sh 'cd test/integration && npm install'
-                        sh 'cd test/integration && npm test'
+						sh 'cd test && npm install'
+                        sh 'cd test && npm test'
 			    
-						sh 'cd test/integration && cp reports.json $WORKSPACE'
+						sh 'cd test && cp reports.json $WORKSPACE'
                         cucumber buildStatus: 'SUCCESS', fileIncludePattern: 'reports.json'
                     } catch (e) {
-						sh 'cd test/integration && cp reports.json $WORKSPACE'
+						sh 'cd test && cp reports.json $WORKSPACE'
                         cucumber buildStatus: 'FAIL', fileIncludePattern: 'reports.json'
                     }
                 }

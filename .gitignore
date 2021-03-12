@@ -27,6 +27,7 @@ nb-configuration.xml
 # Nodejs
 /node_modules
 package-lock.json
+reports.json
 
 # OSX
 .DS_Store
